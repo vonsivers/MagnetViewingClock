@@ -22,6 +22,13 @@ const int FULL_STEPS_PER_REVOLUTION = 2048;
 const int MAXSPEED = 500; 
 const int ACCELERATION = 1000;
 
+// position where hall sensor is triggered
+const int TOH_OFFSET = -1510;
+const int HOURS_OFFSET = 1880;
+const int TOM_OFFSET = -1570;
+const int MINS_OFFSET = 1340;
+
+
 void InitSteppers();
 void MoveRelative(int iMotor, long lSteps);
 void MoveAbsolute(int iMotor, long lSteps);

@@ -13,7 +13,7 @@
 #include "stepper.h"
 #include "clock.h"
 
-#include "ClockCoordinates.h"     //DEBUG DEBUG
+#include "ClockCoordinates.h"     
 
 //=======================================
 // C o n s t a n t s
@@ -157,8 +157,11 @@ void setup()
     Serial.begin(9600);
     Serial.print("Magnet Viewing Clock version 1.0\n");
 
-    pinMode(BTN_MODE, INPUT_PULLUP);
-    pinMode(BTN_ADVANCE, INPUT_PULLUP);
+    pinMode(HALL_MINS_PIN, INPUT);
+    pinMode(HALL_TOM_PIN, INPUT);
+    pinMode(HALL_HOURS_PIN, INPUT);
+    pinMode(HALL_TOH_PIN, INPUT);
+
     pinMode(NOT_ENABLE_PIN, OUTPUT);
 
 
@@ -168,19 +171,19 @@ void setup()
   InitSteppers();
 
   delay(1000);
-  KeypadControl();
-  //TestMotors();
+  FindHomePosition();
+  InitSteppers(); // init steppers again after homing to set correct max speed and acceleration
+  //KeypadControl();  // control motors via serial terminal
+  //TestMotors();   // test all motors
   RunClock();
-  //UpdateDisplayShow();
+  //UpdateDisplayShow();  // run clock in demo mode
 
 
 }
 //-------------------------------------
 // l o o p
 //
-// If we make it to loop() then we are
-// processing user input from terminal
-// window.
+// 
 //-------------------------------------
 void loop()
 {

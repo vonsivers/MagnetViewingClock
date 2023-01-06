@@ -175,6 +175,8 @@ void MoveAllSteppers(long lTOHSteps, long lHoursSteps, long lTOMSteps, long lMin
 
     DisableSteppers();
 }
+
+
 //===============================================================================
 // F i n d H o m e P o s i t i o n
 //
@@ -187,26 +189,20 @@ void FindHomePosition() {
 
     EnableSteppers();
 
-    //Go up the maximum number of steps
-    tohStepper.setupRelativeMoveInSteps(-MAX_TOH_STEPS);
-    hoursStepper.setupRelativeMoveInSteps(-MAX_HOURS_STEPS);
-    tomStepper.setupRelativeMoveInSteps(-MAX_TOM_STEPS);
-    minsStepper.setupRelativeMoveInSteps(-MAX_MINUTES_STEPS);
-
-    while((!tohStepper.motionComplete()) || (!hoursStepper.motionComplete()) || (!tomStepper.motionComplete()) || (!minsStepper.motionComplete())) {
-        tohStepper.processMovement();
-        hoursStepper.processMovement();
-        tomStepper.processMovement();
-        minsStepper.processMovement();
-        }
-
-    DisableSteppers();
+    // rotate until hall switch triggers
+    const int directionTowardHome = -1;
+    minsStepper.moveToHomeInSteps(directionTowardHome, MAXSPEED, 1.5*FULL_STEPS_PER_REVOLUTION, HALL_MINS_PIN);
+    tomStepper.moveToHomeInSteps(-directionTowardHome, MAXSPEED, 1.5*FULL_STEPS_PER_REVOLUTION, HALL_TOM_PIN);    // homing is faster in other direction
+    hoursStepper.moveToHomeInSteps(directionTowardHome, MAXSPEED, 1.5*FULL_STEPS_PER_REVOLUTION, HALL_HOURS_PIN); 
+    tohStepper.moveToHomeInSteps(directionTowardHome, MAXSPEED, 1.5*FULL_STEPS_PER_REVOLUTION, HALL_TOH_PIN);
 
     // Now at home position so set zero
-    tohStepper.setCurrentPositionInSteps(0);
-    hoursStepper.setCurrentPositionInSteps(0);
-    tomStepper.setCurrentPositionInSteps(0);
-    minsStepper.setCurrentPositionInSteps(0);
+    tohStepper.setCurrentPositionInSteps(TOH_OFFSET);
+    hoursStepper.setCurrentPositionInSteps(HOURS_OFFSET);
+    tomStepper.setCurrentPositionInSteps(TOM_OFFSET);
+    minsStepper.setCurrentPositionInSteps(MINS_OFFSET);
+
+    DisableSteppers();
 }
 
 // set current position to zero

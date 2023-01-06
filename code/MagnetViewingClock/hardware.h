@@ -32,9 +32,9 @@ const int TOH_DIR_PIN = 7;
 
 const int NOT_ENABLE_PIN = 8;       //Active low ENABLE pin to turn on stepper drivers
 
-// Pushbutton switches
-#define BTN_MODE A1
-#define BTN_ADVANCE A2
-
+const int HALL_MINS_PIN = 11;          // Z-limit pin
+const int HALL_TOM_PIN = 10;           // Y-limit pin
+const int HALL_HOURS_PIN = 9;         // X-limit pin
+const int HALL_TOH_PIN = 12;          // SpnEn pin
 
 #endif //HARDWARE_H
